@@ -35,3 +35,8 @@ Whilst in a *RUNNABLE* state, a thread may transition to states where it pauses 
 BLOCKED, WAITING or TIMED_WAITING.
 
 Once a thread completes its work or throws an exception, its state becomes *TERMINATED*.
+
+##  Best practices
+
+Code in any thread, including a main(user) thread, which is in a loop and is dependent on some outside factor e.g. a variable
+being modified by another thread, should aleways have a sleep added to avoid hogging CPU.
