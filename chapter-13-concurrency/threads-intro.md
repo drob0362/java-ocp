@@ -6,15 +6,43 @@ A *task* is a single unit of work performed by a thread.
 
 A thread can complete multiple independent tasks, but only one at a time.
 
+## Key points
+
+- A Java application is implictly a thread
+- It is bad practice to have a while loop without a sleep, as it hoggs the CPU
+- A thread can be interrupted by another thread using the `interrupt` method.
+- The `run` method should not be called directly. The `run` method is there to be overriden, rather than executed.
+
 ## Creating a thread
 
 A common way to define a *task* for a thread is by using the *Runnable* interface,
 which is a functional interface.
+Recall that functional interfaces take *no arguments* and have no `return`.
 
 Note that a thread cannot be started with the *run* method, only the *start* method.
 The run method is typically used to define a thread in a class which extends *Thread*.
 
 It is more common and easier to create a thread using Lambdas.
+
+An example of defining a `Runnable`, using Lambdas:
+
+```java
+Runnable myRunnable = () -> {"Hello world, from my runnable"};
+
+new Thread(myRunnable).start();
+```
+
+## The run method
+
+The `run` method exists to define your own behaviour of what work a thread will carry out.
+This can be achieved by extending a Thread class or by implementing a lambda on a `Runnable` object.
+
+The `run` method is not intended to be called directly, though it can be. Doing so results in code running sequentially and in a guaranteed order, which defeats the purpose of threads.
+Threads exist to ensure that a CPU can work in the most efficient way.
+
+If another developer writes code which depends on a resource which is slower than the CPU and they
+do not use threads to their advantage then they will have a knock on effect with you if resources
+are shared.
 
 ## Daemon threads
 
@@ -22,9 +50,11 @@ Daemon threads have specific behaviour in Java, which is that they do not preven
 an application from terminating.
 The java *psvm* method is a user defined thread. User defined threads are not daemon threads.
 
+If a non-daemon thread does not shutdown, then your application will never exit.
+
 ## States
 
-Possible states are NEW, RUNNABLE, TERMINATED, BLOCKED, WAITING and TIMED_WAITING.
+Possible thread states are NEW, RUNNABLE, TERMINATED, BLOCKED, WAITING and TIMED_WAITING.
 
 ## Thread lifecycle
 
@@ -35,6 +65,12 @@ Whilst in a *RUNNABLE* state, a thread may transition to states where it pauses 
 BLOCKED, WAITING or TIMED_WAITING.
 
 Once a thread completes its work or throws an exception, its state becomes *TERMINATED*.
+
+## Interrupting a thread
+
+If a thread is interrupted, it will throw an interrupted exception. The thread state will change
+to *RUNNABLE*. Variables can be allocated to threads using the `currentThread` method.
+A thread may subsequently move to a *BLOCKED* statre if it needs to re-acquire resources when it wakes.
 
 ##  Best practices
 
