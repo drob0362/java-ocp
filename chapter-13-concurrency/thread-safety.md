@@ -27,15 +27,16 @@ Static can be used, should you need to enable thread safety across all instances
 
 ### Sync methods
 
-Adding the `synchronized` modifier to any instance method automatically provides thread safety to an object.
+Adding the `synchronized` modifier to any instance method automatically provides thread safety to an object. This can be used with any object.
 
 ## Lock framework
 
 The lock framework comes into play, if the synchronized functionality is insufficient.
-
 You cannot, for example, check if a lock is available with synchronized.
+`Lock` is an interface, which an object must implement in order for it to be possible to lock it.
 
-The class which provides the lock functionality is the `Reentrant` lock.
+A class which provides the lock functionality is the `Reentrant` class.
+This class only allows to thread to hold a lock at any given time.
 
 The methods available to work with locks are: -
 
